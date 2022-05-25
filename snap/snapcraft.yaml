@@ -1,5 +1,5 @@
 name: edgex-device-usb-camera
-base: core20
+base: core22
 license: Apache-2.0
 adopt-info: metadata
 
@@ -88,7 +88,7 @@ parts:
       # The existing header file misses several of the definitions needed for
       # compiling device-usb-camera.
       # Replace it with one from Ubuntu 22.04:
-      cp snap/local/build-helpers/include/videodev2.h /usr/include/linux/videodev2.h
+      # cp snap/local/build-helpers/include/videodev2.h /usr/include/linux/videodev2.h
 
       # the version is needed for the build
       cat VERSION
