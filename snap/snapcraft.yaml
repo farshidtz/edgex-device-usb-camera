@@ -71,6 +71,7 @@ parts:
       rtsp-simple-server.yml: config/rtsp-simple-server.yml
     stage-packages:
       - curl
+      - libcurl4
     override-build: |
       DOC=$SNAPCRAFT_PART_INSTALL/usr/share/doc/rtsp-simple-server
       mkdir -p $DOC
