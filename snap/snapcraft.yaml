@@ -49,22 +49,39 @@ apps:
 
 parts:      
   rtsp-simple-server:
-    source:
-      - on amd64:
-          https://github.com/aler9/rtsp-simple-server/releases/download/v0.19.2/rtsp-simple-server_v0.19.2_linux_amd64.tar.gz
-      - on arm64:
-          https://github.com/aler9/rtsp-simple-server/releases/download/v0.19.2/rtsp-simple-server_v0.19.2_linux_arm64v8.tar.gz
-    plugin: dump
+    # source:
+    #   - on amd64:
+    #       https://github.com/aler9/rtsp-simple-server/releases/download/v0.19.2/rtsp-simple-server_v0.19.2_linux_amd64.tar.gz
+    #   - on arm64:
+    #       https://github.com/aler9/rtsp-simple-server/releases/download/v0.19.2/rtsp-simple-server_v0.19.2_linux_arm64v8.tar.gz
+    plugin: nil
     organize:
       rtsp-simple-server: bin/rtsp-simple-server
       rtsp-simple-server.yml: config/rtsp-simple-server/config.yml
-    # build-packages: [curl]
+    build-packages: [curl]
     build-snaps: [yq/v4/stable]
     override-build: |
-      # DOC=$SNAPCRAFT_PART_INSTALL/usr/share/doc/rtsp-simple-server
-      # mkdir -p $DOC
-      # curl --silent --show-err https://raw.githubusercontent.com/aler9/rtsp-simple-server/main/LICENSE \
-      #   -o $DOC/LICENSE
+      VERSION=v0.19.2
+
+      # use dpkg architecture to get the target arch
+      case "$(dpkg --print-architecture)" in
+        amd64)
+          ARCH=amd64
+          ;;
+        arm64)
+          ARCH=arm64v8
+          ;;
+      esac
+      FILE=$(printf 'rtsp-simple-server_%s_linux_%s.tar.gz' "$VERSION" "$ARCH")
+      URL=https://github.com/aler9/rtsp-simple-server/releases/download/$VERSION/$FILE
+
+      curl --silent --show-err --location $URL -o $FILE
+      tar -xvf $FILE
+
+      DOC=$SNAPCRAFT_PART_INSTALL/usr/share/doc/rtsp-simple-server
+      mkdir -p $DOC
+      curl --silent --show-err https://raw.githubusercontent.com/aler9/rtsp-simple-server/main/LICENSE \
+        -o $DOC/LICENSE
 
       yq -i '
         .rtmpDisable = "yes" |
