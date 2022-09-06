@@ -48,32 +48,32 @@ apps:
 
 
 parts:      
-  # rtsp-simple-server:
-  #   source:
-  #     - on amd64:
-  #         https://github.com/aler9/rtsp-simple-server/releases/download/v0.19.2/rtsp-simple-server_v0.19.2_linux_amd64.tar.gz
-  #     - on arm64:
-  #         https://github.com/aler9/rtsp-simple-server/releases/download/v0.19.2/rtsp-simple-server_v0.19.2_linux_arm64v8.tar.gz
-  #   plugin: dump
-  #   organize:
-  #     rtsp-simple-server: bin/rtsp-simple-server
-  #     rtsp-simple-server.yml: config/rtsp-simple-server/config.yml
-  #   build-packages: [curl]
-  #   build-snaps: [yq/v4/stable]
-  #   override-build: |
-  #     DOC=$SNAPCRAFT_PART_INSTALL/usr/share/doc/rtsp-simple-server
-  #     mkdir -p $DOC
-  #     curl --silent --show-err https://raw.githubusercontent.com/aler9/rtsp-simple-server/main/LICENSE \
-  #       -o $DOC/LICENSE
+  rtsp-simple-server:
+    source:
+      - on amd64:
+          https://github.com/aler9/rtsp-simple-server/releases/download/v0.19.2/rtsp-simple-server_v0.19.2_linux_amd64.tar.gz
+      - on arm64:
+          https://github.com/aler9/rtsp-simple-server/releases/download/v0.19.2/rtsp-simple-server_v0.19.2_linux_arm64v8.tar.gz
+    plugin: dump
+    organize:
+      rtsp-simple-server: bin/rtsp-simple-server
+      rtsp-simple-server.yml: config/rtsp-simple-server/config.yml
+    # build-packages: [curl]
+    build-snaps: [yq/v4/stable]
+    override-build: |
+      # DOC=$SNAPCRAFT_PART_INSTALL/usr/share/doc/rtsp-simple-server
+      # mkdir -p $DOC
+      # curl --silent --show-err https://raw.githubusercontent.com/aler9/rtsp-simple-server/main/LICENSE \
+      #   -o $DOC/LICENSE
 
-  #     yq -i '
-  #       .rtmpDisable = "yes" |
-  #       .hlsDisable = "yes" |
-  #       .protocols = ["tcp"] |
-  #       .rtspAddress = "127.0.0.1:8554"
-  #       ' rtsp-simple-server.yml
+      yq -i '
+        .rtmpDisable = "yes" |
+        .hlsDisable = "yes" |
+        .protocols = ["tcp"] |
+        .rtspAddress = "127.0.0.1:8554"
+        ' rtsp-simple-server.yml
       
-  #     snapcraftctl build
+      snapcraftctl build
 
   device-usb-camera:
     after: [metadata]
