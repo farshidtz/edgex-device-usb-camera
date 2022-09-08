@@ -48,7 +48,7 @@ apps:
 
 
 parts:      
-   rtsp-simple-server:
+  rtsp-simple-server:
 #     source:
 #       - on amd64:
 #           https://github.com/aler9/rtsp-simple-server/releases/download/v0.19.2/rtsp-simple-server_v0.19.2_linux_amd64.tar.gz
