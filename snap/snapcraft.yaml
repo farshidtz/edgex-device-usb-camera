@@ -4,7 +4,7 @@ adopt-info: metadata
 
 architectures:
   - build-on: amd64
-  - build-on: arm64
+  # - build-on: arm64
 
 grade: stable
 confinement: strict
@@ -75,12 +75,12 @@ parts:
 
       craftctl default 
     override-build: |
-      yq -i '
-        .rtmpDisable = "yes" |
-        .hlsDisable = "yes" |
-        .protocols = ["tcp"] |
-        .rtspAddress = "127.0.0.1:8554"
-        ' rtsp-simple-server.yml
+      # yq -i '
+      #   .rtmpDisable = "yes" |
+      #   .hlsDisable = "yes" |
+      #   .protocols = ["tcp"] |
+      #   .rtspAddress = "127.0.0.1:8554"
+      #   ' rtsp-simple-server.yml
 
       install -DT rtsp-simple-server \
         $SNAPCRAFT_PART_INSTALL/bin/rtsp-simple-server
