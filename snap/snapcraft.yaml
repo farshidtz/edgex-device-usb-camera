@@ -63,15 +63,9 @@ parts:
     override-build: |
       VERSION=v0.19.2
 
-      # use dpkg architecture to get the target arch
-      case "$(dpkg --print-architecture)" in
-        amd64)
-          ARCH=amd64
-          ;;
-        arm64)
-          ARCH=arm64v8
-          ;;
-      esac
+      ARCH=$(dpkg --print-architecture)
+      [ $ARCH == 'arm64' ] && ARCH=arm64v8
+
       FILE=$(printf 'rtsp-simple-server_%s_linux_%s.tar.gz' "$VERSION" "$ARCH")
       URL=https://github.com/aler9/rtsp-simple-server/releases/download/$VERSION/$FILE
 
