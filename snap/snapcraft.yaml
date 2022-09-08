@@ -48,29 +48,29 @@ apps:
 
 
 parts:      
-  rtsp-simple-server:
-    source:
-      - on amd64:
-          https://github.com/aler9/rtsp-simple-server/releases/download/v0.19.2/rtsp-simple-server_v0.19.2_linux_amd64.tar.gz
-      - on arm64:
-          https://github.com/aler9/rtsp-simple-server/releases/download/v0.19.2/rtsp-simple-server_v0.19.2_linux_arm64v8.tar.gz
-    plugin: dump
-    organize:
-      rtsp-simple-server: bin/rtsp-simple-server
-      rtsp-simple-server.yml: config/rtsp-simple-server/config.yml
+   rtsp-simple-server:
+#     source:
+#       - on amd64:
+#           https://github.com/aler9/rtsp-simple-server/releases/download/v0.19.2/rtsp-simple-server_v0.19.2_linux_amd64.tar.gz
+#       - on arm64:
+#           https://github.com/aler9/rtsp-simple-server/releases/download/v0.19.2/rtsp-simple-server_v0.19.2_linux_arm64v8.tar.gz
+    plugin: nil
+#     organize:
+#       rtsp-simple-server: bin/rtsp-simple-server
+#       rtsp-simple-server.yml: config/rtsp-simple-server/config.yml
     build-packages: [curl]
     build-snaps: [yq/v4/stable]
     override-build: |
-      #VERSION=v0.19.2
+      VERSION=v0.19.2
 
-      #ARCH=$(dpkg --print-architecture)
-      #[ $ARCH == 'arm64' ] && ARCH=arm64v8
+      ARCH=$(dpkg --print-architecture)
+      [ $ARCH == 'arm64' ] && ARCH=arm64v8
 
-      #FILE=$(printf 'rtsp-simple-server_%s_linux_%s.tar.gz' "$VERSION" "$ARCH")
-      #URL=https://github.com/aler9/rtsp-simple-server/releases/download/$VERSION/$FILE
+      FILE=$(printf 'rtsp-simple-server_%s_linux_%s.tar.gz' "$VERSION" "$ARCH")
+      URL=https://github.com/aler9/rtsp-simple-server/releases/download/$VERSION/$FILE
 
-      #curl --location $URL -o $FILE
-      #tar -xvf $FILE
+      curl --location $URL -o $FILE
+      tar -xvf $FILE
 
       yq -i '
         .rtmpDisable = "yes" |
@@ -79,10 +79,10 @@ parts:
         .rtspAddress = "127.0.0.1:8554"
         ' rtsp-simple-server.yml
 
-      #install -DT rtsp-simple-server \
-      #  $SNAPCRAFT_PART_INSTALL/bin/rtsp-simple-server
-      #install -DT rtsp-simple-server.yml \
-      #  $SNAPCRAFT_PART_INSTALL/config/rtsp-simple-server/config.yml
+      install -DT rtsp-simple-server \
+        $SNAPCRAFT_PART_INSTALL/bin/rtsp-simple-server
+      install -DT rtsp-simple-server.yml \
+        $SNAPCRAFT_PART_INSTALL/config/rtsp-simple-server/config.yml
       
 
       #DOC=$SNAPCRAFT_PART_INSTALL/usr/share/doc/rtsp-simple-server
