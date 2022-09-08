@@ -60,7 +60,7 @@ parts:
     #   rtsp-simple-server.yml: config/rtsp-simple-server/config.yml
     build-packages: [wget]
     build-snaps: [yq/v4/stable]
-    override-build: |
+    override-pull: |
       VERSION=v0.19.2
 
       ARCH=$(dpkg --print-architecture)
@@ -71,7 +71,9 @@ parts:
 
       wget $URL
       tar -xvf $FILE
-
+      
+      craftctl default 
+    override-build: |
       yq -i '
         .rtmpDisable = "yes" |
         .hlsDisable = "yes" |
@@ -84,10 +86,9 @@ parts:
       install -DT rtsp-simple-server.yml \
         $SNAPCRAFT_PART_INSTALL/config/rtsp-simple-server/config.yml
       
-
-      DOC=$SNAPCRAFT_PART_INSTALL/usr/share/doc/rtsp-simple-server
-      curl --location https://github.com/aler9/rtsp-simple-server/raw/main/LICENSE \
-        --create-dirs -o $DOC/LICENSE
+      # DOC=$SNAPCRAFT_PART_INSTALL/usr/share/doc/rtsp-simple-server
+      # curl --location https://github.com/aler9/rtsp-simple-server/raw/main/LICENSE \
+      #   --create-dirs -o $DOC/LICENSE
       
       #snapcraftctl build
 
