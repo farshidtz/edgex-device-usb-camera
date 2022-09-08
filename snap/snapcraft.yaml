@@ -49,6 +49,7 @@ apps:
 
 parts:      
   rtsp-simple-server:
+    after: [metadata]
     # source:
     #   - on amd64:
     #       https://github.com/aler9/rtsp-simple-server/releases/download/v0.19.2/rtsp-simple-server_v0.19.2_linux_amd64.tar.gz
@@ -71,7 +72,7 @@ parts:
 
       wget $URL
       tar -xvf $FILE
-      
+
       craftctl default 
     override-build: |
       yq -i '
@@ -93,7 +94,7 @@ parts:
       #snapcraftctl build
 
   device-usb-camera:
-    after: [metadata]
+    after: [metadata, rtsp-simple-server]
     source: .
     plugin: make
     build-packages: [git, libzmq3-dev, pkg-config]
