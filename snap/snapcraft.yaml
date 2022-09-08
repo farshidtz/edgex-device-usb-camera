@@ -58,7 +58,7 @@ parts:
     # organize:
     #   rtsp-simple-server: bin/rtsp-simple-server
     #   rtsp-simple-server.yml: config/rtsp-simple-server/config.yml
-    build-packages: [curl]
+    build-packages: [wget]
     build-snaps: [yq/v4/stable]
     override-build: |
       VERSION=v0.19.2
@@ -69,7 +69,7 @@ parts:
       FILE=$(printf 'rtsp-simple-server_%s_linux_%s.tar.gz' "$VERSION" "$ARCH")
       URL=https://github.com/aler9/rtsp-simple-server/releases/download/$VERSION/$FILE
 
-      curl --location $URL -o $FILE
+      wget $URL
       tar -xvf $FILE
 
       yq -i '
@@ -85,10 +85,9 @@ parts:
         $SNAPCRAFT_PART_INSTALL/config/rtsp-simple-server/config.yml
       
 
-      #DOC=$SNAPCRAFT_PART_INSTALL/usr/share/doc/rtsp-simple-server
-      # mkdir -p $DOC
-      #curl https://raw.githubusercontent.com/aler9/rtsp-simple-server/main/LICENSE \
-      #  --create-dirs -o $DOC/LICENSE
+      DOC=$SNAPCRAFT_PART_INSTALL/usr/share/doc/rtsp-simple-server
+      curl --location https://github.com/aler9/rtsp-simple-server/raw/main/LICENSE \
+        --create-dirs -o $DOC/LICENSE
       
       #snapcraftctl build
 
