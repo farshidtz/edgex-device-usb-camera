@@ -60,7 +60,7 @@ parts:
     #   rtsp-simple-server: bin/rtsp-simple-server
     #   rtsp-simple-server.yml: config/rtsp-simple-server/config.yml
     build-packages: [wget]
-    build-snaps: [yq/v4/stable]
+    # build-snaps: [yq/v4/stable]
     override-pull: |
       VERSION=v0.19.2
 
@@ -75,12 +75,19 @@ parts:
 
       craftctl default 
     override-build: |
-      # yq -i '
+      # cat rtsp-simple-server.yml | yq '
       #   .rtmpDisable = "yes" |
       #   .hlsDisable = "yes" |
       #   .protocols = ["tcp"] |
       #   .rtspAddress = "127.0.0.1:8554"
-      #   ' rtsp-simple-server.yml
+      #   ' | tee config.yml > /dev/null
+
+      sed --in-place \
+          -e 's/rtmpDisable: no/rtmpDisable: yes/g' \
+          -e 's/hlsDisable: no/hlsDisable: yes/g' \
+          -e 's/protocols: \[udp, multicast, tcp\]/protocols: \[tcp\]/g' \
+          -e 's/rtspAddress: :8554/rtspAddress = 127.0.0.1:8554/g' \
+          rtsp-simple-server.yml
 
       install -DT rtsp-simple-server \
         $SNAPCRAFT_PART_INSTALL/bin/rtsp-simple-server
