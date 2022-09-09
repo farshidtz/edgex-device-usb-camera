@@ -4,7 +4,7 @@ adopt-info: metadata
 
 architectures:
   - build-on: amd64
-  # - build-on: arm64
+  - build-on: arm64
 
 grade: stable
 confinement: strict
@@ -98,7 +98,6 @@ parts:
       # the version is needed for the build
       cp $SNAPCRAFT_STAGE/version.txt VERSION
 
-      # make tidy
       make build
 
       install -DT "./cmd/device-usb-camera" "$SNAPCRAFT_PART_INSTALL/bin/device-usb-camera"
